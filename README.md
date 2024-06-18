@@ -1,8 +1,10 @@
 # LuneForge
 
 <p align="center">
-  <img src="https://github.com/jboirazian/LuneForge/assets/21143405/0b01245e-0c84-43c3-bcbb-cd5008b424fb" alt="lunelab" width="500"/>
+  <img src="https://github.com/jboirazian/LuneForge/assets/21143405/c74157f0-7896-45e1-a5f4-219d3b1a810d" alt="LuneForge" width="500"/>
 </p>
+
+
 
 ## What is LuneForge?
 
