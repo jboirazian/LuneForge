@@ -1,0 +1,103 @@
+.stlwv2-model {
+    position: relative;
+    min-height: 20em;
+    border: 1px solid #ccc
+}
+
+.stlwv2-inner {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0
+}
+
+.stlwv2-inner>.stlwv2-percent {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 5em;
+    text-align: center;
+    width: 100%;
+    color: #ccc;
+    animation-name: stlwv2-pulse;
+    animation-duration: 2s;
+    animation-iteration-count: infinite
+}
+
+@keyframes stlwv2-pulse {
+    0% {
+        opacity: 1
+    }
+
+    50% {
+        opacity: .625
+    }
+}
+
+.stlwv2-inner>canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity .5s
+}
+
+.stlwv2-inner.stlwv2-loaded>canvas {
+    opacity: 1
+}
+
+.stlwv2-fullscreen-checkbox {
+    display: none !important
+}
+
+.stlwv2-hud {
+    display: none
+}
+
+.stlwv2-loaded>.stlwv2-hud {
+    position: absolute;
+    padding: .25em;
+    z-index: 1000;
+    cursor: pointer;
+    font-weight: 400
+}
+
+.stlwv2-loaded>.stlwv2-github-link {
+    font-size: 1.2em;
+    top: .57em;
+    right: 3em;
+    text-decoration: none;
+    color: #999;
+    display: none
+}
+
+.stlwv2-loaded>.stlwv2-fullscreen-on {
+    font-size: 1.5em;
+    top: 0;
+    right: .2em;
+    transform: rotate(90deg);
+    color: #ccc;
+    display: block
+}
+
+.stlwv2-loaded>.stlwv2-fullscreen-off {
+    font-size: 2em;
+    top: 0;
+    right: .5em;
+    color: #c33;
+    display: none
+}
+
+.stlwv2-fullscreen-checkbox:checked~.stlwv2-loaded>.stlwv2-github-link {
+    display: block
+}
+
+.stlwv2-fullscreen-checkbox:checked~.stlwv2-loaded>.stlwv2-fullscreen-on {
+    display: none
+}
+
+.stlwv2-fullscreen-checkbox:checked~.stlwv2-loaded>.stlwv2-fullscreen-off {
+    display: block
+}

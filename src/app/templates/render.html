@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/106/three.min.js" integrity="sha256-tAVw6WRAXc3td2Esrjd28l54s3P2y7CDFu1271mu5LE=" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="build/stlwebviewer2.css" />
+
+    <style>
+        html {
+            background-color: #f7f7f7;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f1f3f4;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #d9e4f1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar img {
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            width: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+            width: 90%;
+            height: 90%;
+        }
+
+        .stlwv2-model {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <img src="LuneForge.png" width="40%" alt="LuneForge">
+        <p>LuneForge</p>
+    </div>
+    <div class="content">
+        <div class="grid-container">
+            <div class="stlwv2-model" id="model1" data-model-url="{{model1_id}}"></div>
+            <div class="stlwv2-model" id="model2" data-model-url="{{model2_id}}"></div>
+        </div>
+    </div>
+    <script src="build/stlwebviewer2.js"></script>
+    <script>
+        $(document).ready(function() {
+            function appendTimestamp(url) {
+                const timestamp = new Date().getTime();
+                const separator = url.includes('?') ? '&' : '?';
+                return url + separator + 't=' + timestamp;
+            }
+
+            if (typeof StlWebViewer2 !== 'undefined') {
+                new StlWebViewer2({
+                    element: document.getElementById('model1'),
+                    url: appendTimestamp($('#model1').data('model-url'))
+                });
+
+                new StlWebViewer2({
+                    element: document.getElementById('model2'),
+                    url: appendTimestamp($('#model2').data('model-url'))
+                });
+            } else {
+                console.error('StlWebViewer2 is not defined. Ensure that stlwebviewer2.js is loaded correctly.');
+            }
+        });
+    </script>
+</body>
+
+</html>
