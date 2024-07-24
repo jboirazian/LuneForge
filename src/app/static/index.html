@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Mesh Generator</title>
-    <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.1"></script>
     <!-- Include daisyUI CSS -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -43,17 +44,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column; /* Added for better layout */
-            padding: 20px; /* Added for spacing */
-        }
-
-        .loading {
-            display: none;
-            margin-top: 20px; /* Added for spacing */
-        }
-
-        .loading.active {
-            display: block;
+            flex-direction: column;
+            /* Added for better layout */
+            padding: 20px;
+            /* Added for spacing */
         }
 
         .error {
@@ -62,30 +56,46 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-100">
     <div class="sidebar p-4 bg-blue-200">
         <img src="LuneForge.png" class="w-40 rounded-lg mb-4" alt="LuneForge">
-        <p class="font-bold text-xl">LuneForge</p>
+        <p class="font-bold text-xl text-black">LuneForge</p>
+        <button class="btn btn-ghost text-black"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                width="24px" fill="#000000">
+                <path
+                    d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
+            </svg>Home</button>
+        <button class="btn btn-ghost text-black"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                width="24px" fill="#000000">
+                <path
+                    d="M320-320h480v-480h-80v280l-100-60-100 60v-280H320v480Zm0 80q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm360-720h200-200Zm-200 0h480-480Z" />
+            </svg>Builds</button>
+
+
     </div>
 
     <div class="content">
-        <form hx-post="/generate_sphere_mesh" hx-trigger="submit" hx-target="#result" hx-indicator=".loading" hx-swap="innerHTML" hx-on-error="handleError" class="space-y-4">
-            <label for="scale_factor" class="block">Scale Factor:</label>
-            <input type="number" id="scale_factor" name="scale_factor" step="0.01" placeholder="10"required class="input input-bordered w-full">
+        <form hx-post="/generate_sphere_mesh" hx-trigger="submit" hx-target="#result" hx-swap="innerHTML"
+            class="space-y-4" hx-on::before-request="performAnimation()">
+            <label for="scale_factor" class="block text-black">Scale Factor:</label>
+            <input type="number" id="scale_factor" name="scale_factor" step="0.01" placeholder="10" required
+                class="input input-bordered w-full">
 
-            <label for="cube_side_length" class="block">Cube Side Length:</label>
-            <input type="number" id="cube_side_length" name="cube_side_length" step="0.01" placeholder="0.5" required class="input input-bordered w-full">
+            <label for="cube_side_length" class="block text-black">Cube Side Length:</label>
+            <input type="number" id="cube_side_length" name="cube_side_length" step="0.01" placeholder="0.5" required
+                class="input input-bordered w-full">
 
-            <label for="support_length" class="block">Support Length:</label>
-            <input type="number" id="support_length" name="support_length" step="0.01" placeholder="0.2" required class="input input-bordered w-full">
+            <label for="support_length" class="block text-black">Support Length:</label>
+            <input type="number" id="support_length" name="support_length" step="0.01" placeholder="0.2" required
+                class="input input-bordered w-full">
 
-            <label for="sphere_radius" class="block">Sphere Radius:</label>
-            <input type="number" id="sphere_radius" name="sphere_radius" step="0.01" placeholder="7" required class="input input-bordered w-full">
+            <label for="sphere_radius" class="block text-black">Sphere Radius:</label>
+            <input type="number" id="sphere_radius" name="sphere_radius" step="0.01" placeholder="7" required
+                class="input input-bordered w-full">
 
             <button type="submit" class="btn btn-primary">Generate</button>
         </form>
-
-        <div class="loading mt-4">Loading...</div>
 
         <div id="result" class="mt-4">
             <!-- The result or error message will be displayed here -->
@@ -93,22 +103,11 @@
     </div>
 
     <script>
-        function handleError(xhr) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '<p class="error">Error: ' + xhr.statusText + '</p>';
+        function performAnimation(evt) {
+            console.log("aaaaaaaaaaaaaaaaaaaa")
+            document.getElementById('result').innerHTML = '<span class="loading loading-spinner text-primary"></span>';
         }
-
-        document.addEventListener("htmx:configRequest", (event) => {
-            const headers = event.detail.headers;
-            headers['Content-Type'] = 'application/json';
-            event.detail.headers = headers;
-        });
-
-        document.addEventListener("htmx:beforeRequest", (event) => {
-            const formData = new FormData(event.target);
-            const json = JSON.stringify(Object.fromEntries(formData.entries()));
-            event.detail.parameters = json;
-        });
     </script>
 </body>
+
 </html>

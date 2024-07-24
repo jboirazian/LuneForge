@@ -5,6 +5,8 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/106/three.min.js" integrity="sha256-tAVw6WRAXc3td2Esrjd28l54s3P2y7CDFu1271mu5LE=" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="build/stlwebviewer2.css" />
 
     <style>
@@ -64,9 +66,15 @@
 </head>
 
 <body>
-    <div class="sidebar">
-        <img src="LuneForge.png" width="40%" alt="LuneForge">
-        <p>LuneForge</p>
+    <div class="sidebar p-4 bg-blue-200">
+        <img src="LuneForge.png" class="w-40 rounded-lg mb-4" alt="LuneForge">
+        <p class="font-bold text-xl text-black">LuneForge</p>
+        <li>
+            <a>
+                <i class="fa-solid fa-house fa-fw"></i>
+                Home
+            </a>
+        </li>
     </div>
     <div class="content">
         <div class="grid-container">

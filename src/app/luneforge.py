@@ -70,7 +70,8 @@ def generate_sphere_mesh():
     stl_gen.export_to_stl(mesh=models[round(len(models)/3)], filename=f"static/{filename}_unit_cell_center.stl")
     stl_gen.export_to_stl(mesh=models[0], filename=f"static/{filename}_unit_cell_periphery.stl")
 
-    html_button=f'''<button class="btn btn-secondary" href='/render?model_uuid={filename}'>View</button>'''
+
+    html_button=f'''<button class="btn btn-secondary" onclick="location.href='/render?model_uuid={filename}'">View</button>'''
 
     return html_button
 
