@@ -71,5 +71,5 @@ docker compose up --build
 
 ## Contact information:
 
-- Email: juanboirazian@gmail.com
+- Email: jboirazian@frba.utn.edu.ar
 - Linkdin : https://www.linkedin.com/in/juan-boirazian/ 
