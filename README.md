@@ -18,7 +18,10 @@ LuneForge is a cutting-edge **work in progress** open-source tool designed for c
 
 
 
-https://github.com/user-attachments/assets/ecc529fc-8d8c-4f9a-89e9-b0d2e0e8fea8
+
+https://github.com/user-attachments/assets/7037960c-ab61-4e32-aaee-4b98a8713ff3
+
+
 
 
 
@@ -68,5 +71,5 @@ docker compose up --build
 
 ## Contact information:
 
-- Email: juanboirazian@gmail.com
+- Email: jboirazian@frba.utn.edu.ar
 - Linkdin : https://www.linkedin.com/in/juan-boirazian/ 
