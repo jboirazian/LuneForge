@@ -11,7 +11,7 @@ app = Flask(__name__, static_url_path='',static_folder='static',template_folder=
 def render_model():
     try:
         model_uuid = request.args.get('model_uuid', default = "", type = str)
-        return render_template("render.html",model1_id=f"{model_uuid}.stl",model2_id=f"{model_uuid}_cross.stl"), 200
+        return render_template("render.html",cst_studio_model_id=f"{model_uuid}.obj",model1_id=f"{model_uuid}.stl",model2_id=f"{model_uuid}_cross.stl"), 200
     except Exception as e:
         app.logger.error(f"Error serving render.html: {e}")
         return jsonify({"error": "File not found"}), 404
@@ -29,12 +29,13 @@ def main_page():
 
 @app.route('/generate_sphere_mesh', methods=['POST'])
 def generate_sphere_mesh():
-    data = request.args
+    data = request.form
+    print(data)
     filename = str(uuid.uuid4())
-    k = data.get('scale_factor', 10)
-    cube_side_length = data.get('cube_side_length', 0.5)
-    support_length = data.get('support_length', 0.2)
-    sphere_radius = data.get('sphere_radius', 7)
+    k = data.get('scale_factor',type=float)
+    cube_side_length = data.get('cube_side_length',type=float)
+    support_length = data.get('support_length',type=float)
+    sphere_radius = data.get('sphere_radius',type=float)
     
     size = sphere_radius * 2
     models = []
@@ -62,6 +63,7 @@ def generate_sphere_mesh():
     model = stl_gen.merge_models(models=models)
     model_scaled = stl_gen.scale_model(mesh=model, scale_factor=k)
     stl_gen.export_to_stl(mesh=model_scaled, filename=f"static/{filename}.stl")
+    stl_gen.export_to_stl(mesh=model_scaled, filename=f"static/{filename}.obj")
 
     half_model = stl_gen.merge_models(models=half_models)
     half_model_scaled = stl_gen.scale_model(mesh=half_model, scale_factor=k)
