@@ -4,3 +4,5 @@ services:
     build:
       context: .
       dockerfile: src/app/Dockerfile
+    volumes:
+      - ./models:/app/static/models

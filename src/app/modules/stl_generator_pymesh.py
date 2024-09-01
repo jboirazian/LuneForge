@@ -1,6 +1,14 @@
 import numpy as np
 import pymesh
-from functools import reduce
+import json
+
+def generate_metadata(path:str,data:dict):
+    if('id' in data):
+        json.dump( data, open( f"{path}/{data['id']}.json", 'w' ) )
+        return True
+    else:
+        return False
+
 
 def add_square_holes(sphere:pymesh.Mesh,holes:list):
     """
