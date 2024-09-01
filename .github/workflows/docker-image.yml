@@ -26,5 +26,5 @@ jobs:
 
     - name: Push the Docker image to Docker Hub
       run: |
-        docker tag luneforge:$(date +%s) ${{ secrets.DOCKER_USERNAME }}/luneforge:latest
+        docker tag luneforge:$(date +%s) ${{ secrets.DOCKER_USER }}/luneforge:latest
         docker push ${{ secrets.DOCKER_USER }}/luneforge:latest
