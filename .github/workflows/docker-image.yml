@@ -14,5 +14,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
     - name: Build the Docker image
-      run: docker build . --file src/app/Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file src/app/Dockerfile --tag luneforge:$(date +%s)
+
+    - name: Push the Docker image to Docker Hub
+      run: |
+        docker tag luneforge:$(date +%s) ${{ secrets.DOCKER_USERNAME }}/luneforge:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/luneforge:latest
