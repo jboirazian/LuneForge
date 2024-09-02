@@ -15,6 +15,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Set up environment variable for timestamp
+      id: vars
+      run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
+
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
@@ -22,9 +26,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build the Docker image
-      run: docker build . --file src/app/Dockerfile --tag luneforge:$(date +%s)
+      run: docker build . --file src/app/Dockerfile --tag luneforge:${{ env.TIMESTAMP }}
 
     - name: Push the Docker image to Docker Hub
       run: |
-        docker tag luneforge:$(date +%s) ${{ secrets.DOCKER_USER }}/luneforge:latest
+        docker tag luneforge:${{ env.TIMESTAMP }} ${{ secrets.DOCKER_USER }}/luneforge:latest
         docker push ${{ secrets.DOCKER_USER }}/luneforge:latest
