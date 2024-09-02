@@ -70,26 +70,24 @@
                 <path
                     d="M320-320h480v-480h-80v280l-100-60-100 60v-280H320v480Zm0 80q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm360-720h200-200Zm-200 0h480-480Z" />
             </svg>Builds</button>
-
-
     </div>
 
     <div class="content">
         <form hx-post="/generate_sphere_mesh" hx-trigger="submit" hx-target="#result" hx-swap="innerHTML"
             class="space-y-4" hx-on::before-request="performAnimation()">
-            <label for="scale_factor" class="block text-black">Scale Factor:</label>
+            <label for="scale_factor" class="block text-black">Scale Factor</label>
             <input type="number" id="scale_factor" name="scale_factor" step="0.01" placeholder="10" required
                 class="input input-bordered w-full">
 
-            <label for="cube_side_length" class="block text-black">Cube Side Length:</label>
+            <label for="cube_side_length" class="block text-black">Cube side length [in milimiters]</label>
             <input type="number" id="cube_side_length" name="cube_side_length" step="0.01" placeholder="0.5" required
                 class="input input-bordered w-full">
 
-            <label for="support_length" class="block text-black">Support Length:</label>
+            <label for="support_length" class="block text-black">Support length [in milimiters]</label>
             <input type="number" id="support_length" name="support_length" step="0.01" placeholder="0.2" required
                 class="input input-bordered w-full">
 
-            <label for="sphere_radius" class="block text-black">Sphere Radius:</label>
+            <label for="sphere_radius" class="block text-black">Sphere radius [in milimiters]</label>
             <input type="number" id="sphere_radius" name="sphere_radius" step="0.01" placeholder="7" required
                 class="input input-bordered w-full">
 
