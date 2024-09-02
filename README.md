@@ -29,10 +29,12 @@ https://github.com/user-attachments/assets/7037960c-ab61-4e32-aaee-4b98a8713ff3
 
 - [x] Lightweight and fast generation of Luneburg lenses
 - [x] Elegant Web base UI
-- [x] Export generated image to .stl file
+- [x] Export generated image to .stl file for 3D printing
+- [x] Export generated image to .obj file for CST studio
+- [ ] Release online demo 
 - [ ] Material DRC Check  
 - [ ] Ability to introduce multiple lattice unti cells for the lens generation
-- [ ] DockerHub image for fast instalation
+- [x] DockerHub image for fast instalation
 - [ ] Multi Lens generation
 - [ ] Integration with CST Studio
 - [ ] And many more !
@@ -42,10 +44,11 @@ https://github.com/user-attachments/assets/7037960c-ab61-4e32-aaee-4b98a8713ff3
 
 For the following , it is required to have [Docker](https://www.docker.com/) installed 
 
-Install from Dockerhub:
+Install from Dockerhub (recommended):
 
 ```bash
-comming soon...
+docker run --name luneforge -v $(pwd)/models:/app/static/models juanboirazian/luneforge
+
 ```
 
 Install from source:
@@ -65,7 +68,7 @@ docker compose up --build
 
 ## Tech Stack
 
-**Client:** HTMX, DaisyUI, TailwindCSS
+**Client:** HTMX, DaisyUI
 
 **Server:** Flask , Pymesh
 
