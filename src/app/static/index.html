@@ -75,10 +75,6 @@
     <div class="content">
         <form hx-post="/generate_sphere_mesh" hx-trigger="submit" hx-target="#result" hx-swap="innerHTML"
             class="space-y-4" hx-on::before-request="performAnimation()">
-            <label for="scale_factor" class="block text-black">Scale Factor</label>
-            <input type="number" id="scale_factor" name="scale_factor" step="0.01" placeholder="10" required
-                class="input input-bordered w-full">
-
             <label for="cube_side_length" class="block text-black">Cube side length [in milimiters]</label>
             <input type="number" id="cube_side_length" name="cube_side_length" step="0.01" placeholder="0.5" required
                 class="input input-bordered w-full">

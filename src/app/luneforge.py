@@ -69,7 +69,7 @@ def generate_sphere_mesh():
     data = request.form
     print(data)
     filename = str(uuid.uuid4())
-    k = data.get('scale_factor', type=float)
+    k = 10
     cube_side_length = data.get('cube_side_length', type=float)
     support_length = data.get('support_length', type=float)
     sphere_radius = data.get('sphere_radius', type=float)
@@ -105,7 +105,7 @@ def generate_sphere_mesh():
                           filename=f"{models_dir}/{filename}_cross.stl")
 
     # Save metadata of file
-    data = {"id": filename, "k": k, "cube_side_length": cube_side_length,
+    data = {"id": filename, "cube_side_length": cube_side_length,
             "support_length": support_length, "sphere_radius": sphere_radius}
 
     stl_gen.generate_metadata(path=models_dir,data=data)
