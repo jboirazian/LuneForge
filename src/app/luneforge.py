@@ -13,7 +13,7 @@ app = Flask(__name__, static_url_path='',
             static_folder='static', template_folder='templates')
 
 
-models_dir=f"{app.static_folder}/models"
+models_dir = f"{app.static_folder}/models"
 
 
 @app.route('/render')
@@ -44,11 +44,12 @@ def get_builds():
         html_data = ""
         for file in files:
             if ((".stl" in file) and ('_' not in file)):
-                id=file.replace(".stl", "")
+                id = file.replace(".stl", "")
                 creation_time = getctime(f"{models_dir}/{file}")
                 creation_date = datetime.datetime.fromtimestamp(creation_time)
-                info = json.load( open( f"{models_dir}/{id}.json" ) )
-                html_data += render_template("containers.html", filename=id, creation_date=creation_date,info=info)
+                info = json.load(open(f"{models_dir}/{id}.json"))
+                html_data += render_template("containers.html",
+                                             filename=id, creation_date=creation_date, info=info)
         return html_data, 200
     except Exception as e:
         app.logger.error(f"Error: {e}")
@@ -69,7 +70,7 @@ def generate_sphere_mesh():
     data = request.form
     print(data)
     filename = str(uuid.uuid4())
-    k = 10
+    k = 1
     cube_side_length = data.get('cube_side_length', type=float)
     support_length = data.get('support_length', type=float)
     sphere_radius = data.get('sphere_radius', type=float)
@@ -91,24 +92,30 @@ def generate_sphere_mesh():
                         support_side_length=cube_side_length
                     )
                     models.append(model)
+                    if((x,y,z)==(0,0,0)):
+                        stl_gen.export_to_stl(mesh=model, filename=f"{models_dir}/{filename}_center_cube.stl")
+
                     if x >= 0:
                         half_models.append(model)
 
     model = stl_gen.merge_models(models=models)
     model_scaled = stl_gen.scale_model(mesh=model, scale_factor=k)
+    n_cells=len(models)
 
     half_model = stl_gen.merge_models(models=half_models)
     half_model_scaled = stl_gen.scale_model(mesh=half_model, scale_factor=k)
-    stl_gen.export_to_stl(mesh=model_scaled, filename=f"{models_dir}/{filename}.stl")
-    stl_gen.export_to_stl(mesh=model_scaled, filename=f"{models_dir}/{filename}.obj")
+    stl_gen.export_to_stl(
+        mesh=model_scaled, filename=f"{models_dir}/{filename}.stl")
+    stl_gen.export_to_stl(
+        mesh=model_scaled, filename=f"{models_dir}/{filename}.obj")
     stl_gen.export_to_stl(mesh=half_model_scaled,
                           filename=f"{models_dir}/{filename}_cross.stl")
 
     # Save metadata of file
     data = {"id": filename, "cube_side_length": cube_side_length,
-            "support_length": support_length, "sphere_radius": sphere_radius}
+            "support_length": support_length, "sphere_radius": sphere_radius,"n_cells":n_cells}
 
-    stl_gen.generate_metadata(path=models_dir,data=data)
+    stl_gen.generate_metadata(path=models_dir, data=data)
 
     html_button = f'''<button class="btn btn-secondary" onclick="location.href='/render?model_uuid={filename}'">View</button>'''
 
@@ -116,4 +123,4 @@ def generate_sphere_mesh():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',threaded=True, port=5000)
+    app.run(host='0.0.0.0', threaded=True, port=5000)
