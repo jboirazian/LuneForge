@@ -42,6 +42,11 @@ def get_builds():
         files = [f for f in listdir(models_dir) if isfile(
             join(models_dir, f))]
         html_data = ""
+        if(len(files)==0):
+            ## No files in directory
+            html_data=render_template("no_builds.html")
+            return html_data, 200
+
         for file in files:
             if ((".stl" in file) and ('_' not in file)):
                 id = file.replace(".stl", "")
