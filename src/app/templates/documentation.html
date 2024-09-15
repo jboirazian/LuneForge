@@ -45,21 +45,14 @@
             align-items: center;
         }
 
+        
+
         .grid-container {
             display: grid;
             grid-template-rows: 1fr 1fr;
             gap: 10px;
             width: 90%;
             height: 90%;
-        }
-
-        .stlwv2-model {
-            width: 100%;
-            height: 100%;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -83,9 +76,11 @@
                 <path
                     d="M280-280h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm-80 480q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z" />
             </svg>Docs</button>
-    </div>
-    <div class="content flex flex-col items-center" hx-get="/get_builds" hx-trigger="load">
 
+
+    </div>
+    <div class="text-black" hx-get="/get_docs" hx-trigger="load">
+    
     </div>
 
 </body>

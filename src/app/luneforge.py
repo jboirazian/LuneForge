@@ -8,6 +8,7 @@ from os import listdir, stat
 from os.path import isfile, join, getctime
 import datetime
 import json
+import markdown
 
 app = Flask(__name__, static_url_path='',
             static_folder='static', template_folder='templates')
@@ -24,6 +25,17 @@ def render_model():
     except Exception as e:
         app.logger.error(f"Error serving render.html: {e}")
         return jsonify({"error": "File not found"}), 404
+
+
+
+@app.route('/docs')
+def show_docs():
+    try:
+        return render_template("documentation.html"), 200
+    except Exception as e:
+        app.logger.error(f"Error serving documentation.html: {e}")
+        return jsonify({"error": "File not found"}), 404
+
 
 
 @app.route('/builds')
@@ -67,6 +79,19 @@ def main_page():
         return app.send_static_file("index.html")
     except Exception as e:
         app.logger.error(f"Error serving index.html: {e}")
+        return jsonify({"error": "File not found"}), 404
+
+
+
+@app.route('/get_docs')
+def documentation_page():
+    try:
+        with open(f"{app.static_folder}/docs/Docs.md", 'r', encoding='utf-8') as file:
+            text = file.read()
+            html_docs = markdown.markdown(text)
+        return html_docs,200
+    except Exception as e:
+        app.logger.error(f"Error serving docs/Docs.md: {e}")
         return jsonify({"error": "File not found"}), 404
 
 
