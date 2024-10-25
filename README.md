@@ -1,5 +1,5 @@
 # LuneForge
-[![Featured on Hacker News](https://hackerbadge.now.sh/api?id=41425675)](https://news.ycombinator.com/item?id=41425675)
+![Featured on Hacker News](https://juan-boirazian.link/hn-Luneforge)
 <p align="center">
   <img src="https://github.com/jboirazian/LuneForge/assets/21143405/c74157f0-7896-45e1-a5f4-219d3b1a810d" alt="LuneForge" width="500"/>
 </p>
