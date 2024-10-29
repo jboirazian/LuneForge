@@ -15,7 +15,12 @@ def generate_cubic_unit_cell(cubic_center:list=[0,0,0],support_length:int=0,cube
 
     print(f"{cubic_center[0]},{cubic_center[1]},{cubic_center[2]},{cube_side_lenght},{(cubic_center[0]**2+cubic_center[1]**2+cubic_center[2]**2)/25}")
     unit_cell=stl_gen.merge_models(models=models)
-    print(f"Volume : {unit_cell.volume} , Max Volume: {support_length**3}, Support only volume: {3*(support_length*support_side_length**2)-support_side_length**3}")
+
+    ## We manually calculate the volume of each cell
+    support_structure_volume=(3*(support_length*(support_side_length**2))-support_side_length**3)
+    cube_volume=(cube_side_lenght**3)
+    unit_cell_max_volume=support_side_length**3
+    print(f"Max Space volume: {unit_cell_max_volume} |Cube volume: {cube_volume} | Support only volume: {support_structure_volume} (ratio : {support_structure_volume/unit_cell_max_volume})")
     return unit_cell
 
 

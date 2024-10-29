@@ -1,5 +1,7 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template ,send_from_directory
+import os
 import modules.stl_generator_pymesh as stl_gen
+import modules.lens_builder as lens_builder
 import numpy as np
 import modules.unit_cells as unit_cells
 import modules.geometry as geometry
@@ -16,6 +18,11 @@ app = Flask(__name__, static_url_path='',
 
 models_dir = f"{app.static_folder}/models"
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 
 @app.route('/render')
 def render_model():
@@ -27,7 +34,6 @@ def render_model():
         return jsonify({"error": "File not found"}), 404
 
 
-
 @app.route('/docs')
 def show_docs():
     try:
@@ -35,7 +41,6 @@ def show_docs():
     except Exception as e:
         app.logger.error(f"Error serving documentation.html: {e}")
         return jsonify({"error": "File not found"}), 404
-
 
 
 @app.route('/builds')
@@ -54,9 +59,9 @@ def get_builds():
         files = [f for f in listdir(models_dir) if isfile(
             join(models_dir, f))]
         html_data = ""
-        if(len(files)==0):
-            ## No files in directory
-            html_data=render_template("no_builds.html")
+        if (len(files) == 0):
+            # No files in directory
+            html_data = render_template("no_builds.html")
             return html_data, 200
 
         for file in files:
@@ -82,14 +87,13 @@ def main_page():
         return jsonify({"error": "File not found"}), 404
 
 
-
 @app.route('/get_docs')
 def documentation_page():
     try:
         with open(f"{app.static_folder}/docs/Docs.md", 'r', encoding='utf-8') as file:
             text = file.read()
             html_docs = markdown.markdown(text)
-        return html_docs,200
+        return html_docs, 200
     except Exception as e:
         app.logger.error(f"Error serving docs/Docs.md: {e}")
         return jsonify({"error": "File not found"}), 404
@@ -98,52 +102,23 @@ def documentation_page():
 @app.route('/generate_sphere_mesh', methods=['POST'])
 def generate_sphere_mesh():
     data = request.form
-    print(data)
     filename = str(uuid.uuid4())
-    k = 1
     cube_side_length = data.get('cube_side_length', type=float)
     support_length = data.get('support_length', type=float)
     sphere_radius = data.get('sphere_radius', type=float)
+    dielectric_ratio_length = cube_side_length*0.8
 
-    size = sphere_radius * 2
-    models = []
-    half_models = []
+    models, half_models = lens_builder.build_cells(
+        sphere_radius=sphere_radius, cube_side_length=cube_side_length, support_length=support_length, dielectric_ratio_length=dielectric_ratio_length)
 
-    for z in np.arange(-size/2, size/2, cube_side_length):
-        for y in np.arange(-size/2, size/2, cube_side_length):
-            for x in np.arange(-size/2, size/2, cube_side_length):
-                if geometry.check_point_in_sphere(point=[x, y, z], radius=sphere_radius):
-                    cube_side_length_adjusted = cube_side_length * \
-                        (1 - (((x**2 + y**2+z**2)) * 0.02))
-                    model = unit_cells.generate_cubic_unit_cell(
-                        cubic_center=[x, y, z],
-                        support_length=support_length,
-                        cube_side_lenght=cube_side_length_adjusted,
-                        support_side_length=cube_side_length
-                    )
-                    models.append(model)
-                    if((x,y,z)==(0,0,0)):
-                        stl_gen.export_to_stl(mesh=model, filename=f"{models_dir}/{filename}_center_cube.stl")
+    lens_builder.build_models(
+        models=models, half_models=half_models, models_dir=models_dir, filename=filename)
 
-                    if x >= 0:
-                        half_models.append(model)
-
-    model = stl_gen.merge_models(models=models)
-    model_scaled = stl_gen.scale_model(mesh=model, scale_factor=k)
-    n_cells=len(models)
-
-    half_model = stl_gen.merge_models(models=half_models)
-    half_model_scaled = stl_gen.scale_model(mesh=half_model, scale_factor=k)
-    stl_gen.export_to_stl(
-        mesh=model_scaled, filename=f"{models_dir}/{filename}.stl")
-    stl_gen.export_to_stl(
-        mesh=model_scaled, filename=f"{models_dir}/{filename}.obj")
-    stl_gen.export_to_stl(mesh=half_model_scaled,
-                          filename=f"{models_dir}/{filename}_cross.stl")
+    n_cells = len(models)
 
     # Save metadata of file
     data = {"id": filename, "cube_side_length": cube_side_length,
-            "support_length": support_length, "sphere_radius": sphere_radius,"n_cells":n_cells}
+            "support_length": support_length, "sphere_radius": sphere_radius, "n_cells": n_cells}
 
     stl_gen.generate_metadata(path=models_dir, data=data)
 
@@ -153,4 +128,4 @@ def generate_sphere_mesh():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', threaded=True, port=5000)
+    app.run(host='0.0.0.0', threaded=True, port=5000,debug=False)

@@ -6,3 +6,4 @@ services:
       dockerfile: src/app/Dockerfile
     volumes:
       - ./models:/app/static/models
+    network_mode: host
