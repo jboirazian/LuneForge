@@ -1,3 +1,3 @@
 models
-tools/webscreenshot
-tools/screenshots/*.png
+tools/release_screenshots/webscreenshot
+tools/release_screenshots/screenshots/*.png

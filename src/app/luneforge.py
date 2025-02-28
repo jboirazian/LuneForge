@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify, render_template ,send_from_directory
+from flask import Flask, request, jsonify, render_template, send_from_directory
 import os
 import modules.stl_generator_pymesh as stl_gen
 import modules.lens_builder as lens_builder
+from modules.release_info import show_release_info
 import numpy as np
 import modules.unit_cells as unit_cells
 import modules.geometry as geometry
@@ -17,6 +18,8 @@ app = Flask(__name__, static_url_path='',
 
 
 models_dir = f"{app.static_folder}/models"
+
+
 
 @app.route('/favicon.ico')
 def favicon():
@@ -101,31 +104,33 @@ def documentation_page():
 
 @app.route('/generate_sphere_mesh', methods=['POST'])
 def generate_sphere_mesh():
-    data = request.form
-    filename = str(uuid.uuid4())
-    cube_side_length = data.get('cube_side_length', type=float)
-    support_length = data.get('support_length', type=float)
-    sphere_radius = data.get('sphere_radius', type=float)
-    dielectric_ratio_length = cube_side_length*0.8
+    try:
+        data = request.form
+        filename = str(uuid.uuid4())
+        material=data.get('material', type=str)
+        epsilon=float(material.split(";")[0])
+        tan_loss=float(material.split(";")[-1])
+        cube_side_length = data.get('cube_side_length', type=float)
+        support_length = data.get('support_length', type=float)
+        sphere_radius = data.get('sphere_radius', type=float)
 
-    models, half_models = lens_builder.build_cells(
-        sphere_radius=sphere_radius, cube_side_length=cube_side_length, support_length=support_length, dielectric_ratio_length=dielectric_ratio_length)
+        models, half_models = lens_builder.build_cells(sphere_radius=sphere_radius,support_length=support_length,epsilon=epsilon)
 
-    lens_builder.build_models(
-        models=models, half_models=half_models, models_dir=models_dir, filename=filename)
+        lens_builder.build_models(
+            models=models, half_models=half_models, models_dir=models_dir, filename=filename)
+        # Save metadata of file
+        data = {"id": filename, "cube_side_length": cube_side_length,
+                "support_length": support_length, "sphere_radius": sphere_radius, "n_cells": len(models)}
 
-    n_cells = len(models)
+        stl_gen.generate_metadata(path=models_dir, data=data)
 
-    # Save metadata of file
-    data = {"id": filename, "cube_side_length": cube_side_length,
-            "support_length": support_length, "sphere_radius": sphere_radius, "n_cells": n_cells}
-
-    stl_gen.generate_metadata(path=models_dir, data=data)
-
-    html_button = f'''<button class="btn btn-secondary" onclick="location.href='/render?model_uuid={filename}'">View</button>'''
-
-    return html_button
+        html_button = f'''<button class="btn btn-success w-full" onclick="location.href='/render?model_uuid={filename}'">View</button>'''
+        return html_button
+    except Exception as e:
+        error_html = f'''<div class="collapse bg-error text-black"><input type="checkbox" /><div class="collapse-title text-xl font-medium">Error : Click to view</div><div class="collapse-content"><p>{e}</p></div></div>'''
+        return error_html
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', threaded=True, port=5000,debug=False)
+    show_release_info()
+    app.run(host='0.0.0.0', threaded=True, port=5000, debug=False)

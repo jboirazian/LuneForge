@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/htmx.org@2.0.1"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <style>
         html {
             background-color: #f7f7f7;
@@ -21,6 +21,25 @@
             min-height: 100vh;
             margin: 0;
             background-color: #f1f3f4;
+        }
+
+
+        .form-section {
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .form-section label {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .form-section input {
+            margin-top: 5px;
         }
 
         .sidebar {
@@ -79,33 +98,58 @@
     </div>
 
     <div class="content">
-        <form hx-post="/generate_sphere_mesh" hx-trigger="submit" hx-target="#result" hx-swap="innerHTML"
-            class="space-y-4" hx-on::before-request="performAnimation()">
-            <label for="cube_side_length" class="block text-black">Cube side length [in milimiters]</label>
-            <input type="number" id="cube_side_length" name="cube_side_length" step="0.01" placeholder="0.5" required
-                class="input input-bordered w-full">
+        <div class="form-section">
+            <form hx-post="/generate_sphere_mesh" hx-trigger="submit" hx-target="#result" hx-swap="innerHTML"
+                class="space-y-4" hx-on::before-request="performAnimation()">
 
-            <label for="support_length" class="block text-black">Support length [in milimiters]</label>
-            <input type="number" id="support_length" name="support_length" step="0.01" placeholder="0.2" required
-                class="input input-bordered w-full">
+                <label for="material" class="block text-black">
+                    <a href="/docs" target="_blank" class="text-blue-500 no-underline">Select
+                        Material</a>
+                </label>
+                <select id="material" name="material" class="select select-bordered w-full">
+                    <option value="2.8;0.002">Radix resin (Rogers Company)</option>
+                    <option value="2.7;0.001">Standard resin (FormLabs)</option>
+                </select>
 
-            <label for="sphere_radius" class="block text-black">Sphere radius [in milimiters]</label>
-            <input type="number" id="sphere_radius" name="sphere_radius" step="0.01" placeholder="7" required
-                class="input input-bordered w-full">
+                <label for="unit-cell-type" class="block text-black">
+                    <a href="/docs" target="_blank" class="text-blue-500 no-underline">Select
+                        Unit cell</a>
+                </label>
+                <select id="unit-cell-type" name="unit-cell-type" class="select select-bordered w-full">
+                    <option value="1">Cubic</option>
+                    <option value="1">Spheric</option>
+                </select>
 
-            <button type="submit" class="btn btn-primary">Generate</button>
-        </form>
+                <label for="frequency" class="block text-black">Working frequency [in GHz]</label>
+                <input type="number" id="frequency" name="frequency" step="0.1" placeholder="2.4"
+                    required class="input input-bordered w-full" />
 
-        <div id="result" class="mt-4">
-            <!-- The result or error message will be displayed here -->
+                <label for="cube_side_length" class="block text-black">Cube side length [in millimeters]</label>
+                <input type="number" id="cube_side_length" name="cube_side_length" step="0.01" placeholder="0.5"
+                    required class="input input-bordered w-full" />
+
+                <label for="support_length" class="block text-black">Support length [in millimeters]</label>
+                <input type="number" id="support_length" name="support_length" step="0.01" placeholder="0.2" required
+                    class="input input-bordered w-full" />
+
+                <label for="sphere_radius" class="block text-black">Sphere radius [in millimeters]</label>
+                <input type="number" id="sphere_radius" name="sphere_radius" step="0.01" placeholder="7" required
+                    class="input input-bordered w-full" />
+
+
+                <button type="submit" class="btn btn-primary mt-4 w-full">Generate</button>
+            </form>
+
+            <div id="result" class="mt-4 flex justify-center items-center">
+                <!-- The result or error message will be displayed here -->
+            </div>
         </div>
-    </div>
 
-    <script>
-        function performAnimation(evt) {
-            document.getElementById('result').innerHTML = '<span class="loading loading-spinner text-primary"></span>';
-        }
-    </script>
+        <script>
+            function performAnimation(evt) {
+                document.getElementById('result').innerHTML = '<span class="loading loading-spinner text-primary"></span>';
+            }
+        </script>
 </body>
 
 </html>

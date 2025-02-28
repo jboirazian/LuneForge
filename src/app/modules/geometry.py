@@ -16,6 +16,7 @@ def generate_sphere_points(radius, num_points):
     return points
 
 
+
 def check_point_in_sphere(point, radius):
     x, y, z = point
     distance_squared = x**2 + y**2 + z**2
